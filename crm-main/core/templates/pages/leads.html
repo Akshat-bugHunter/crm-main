@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+Leads
+{% endblock %}
+
+
+{% block formtitle %}
+Add Leads
+{% endblock %}
+
+
+{% block content %}
+{% include 'components/leadstable.html' %}
+{% endblock %}
+
+
+{% block formcontent %}
+<form class="gridform" action="{% url 'leads' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+{% endblock %}
