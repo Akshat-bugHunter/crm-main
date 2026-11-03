@@ -1,48 +1,56 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-@import "tailwindcss";
-@plugin "daisyui" {
-  themes:
-    light,
-    dark --prefersdark,
-    corporate --default;
-}
 
 * {
-  font-family: "Roboto", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 form {
-  width: 100%;
-  max-height: 80vh;
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    width: 100%;
+    max-height: 80vh;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 form > div {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 input,
-select {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid rgb(143, 143, 143);
+select,
+textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    outline: none;
+    background-color: #ffffff;
+    font-size: 0.875rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 .gridform {
-  width: 100%;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+    width: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
 .gridform > button {
-  grid-column: span 2;
+    grid-column: span 2;
 }
 
 #id_image {
-  width: 100%;
+    width: 100%;
 }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }

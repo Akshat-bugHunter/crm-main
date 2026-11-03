@@ -1,58 +1,109 @@
-<div class="drawer-side is-drawer-close:overflow-visible">
-    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div
-        class="bg-[#0f172a] text-white flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+﻿<!-- Sidebar -->
+<aside id="sidebar" style="width:256px; flex-shrink:0; display:flex; flex-direction:column; justify-content:space-between; transition:transform 0.3s, background 0.2s; z-index:30; background:white; border-right:1px solid #e5e7eb;" class="fixed inset-y-0 left-0 -translate-x-full md:relative md:translate-x-0">
+    <div style="display:flex; flex-direction:column; height:100%;">
 
-        <ul class="menu w-full grow">
-            <li class="mb-6">
-                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
-                    <i class="ph-fill ph-building-apartment text-yellow-500 text-3xl"></i>
-                    <span class="is-drawer-close:hidden text-2xl font-medium">EstateFlow</span>
-                </button>
-            </li>
-            <li>
-                <a href="{% url 'agents' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Dashboard">
-                    <i class="ph-fill ph-grid-four text-lg"></i>
-                    <span class="is-drawer-close:hidden">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'leads' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Leads">
-                    <i class="ph-fill ph-users-three text-xl"></i>
-                    <span class="is-drawer-close:hidden">Leads</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'agents' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Agents">
-                    <i class="ph-fill ph-user-circle text-xl"></i>
-                    <span class="is-drawer-close:hidden">Agents</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'properties' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Properties">
-                    <i class="ph-fill ph-buildings text-xl"></i>
-                    <span class="is-drawer-close:hidden">Properties</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'deals' %}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Deals">
-                    <i class="ph-fill ph-handshake text-xl"></i>
-                    <span class="is-drawer-close:hidden">Deals</span>
-                </a>
-            </li>
+        <!-- Logo -->
+        <div style="height:64px; padding:0 24px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; justify-content:space-between;">
+            <a href="{% url 'home' %}" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+                <div style="width:40px; height:40px; border-radius:12px; background:#2563eb; color:white; display:flex; align-items:center; justify-content:center;">
+                    <i class="fa-solid fa-city" style="font-size:1.1rem;"></i>
+                </div>
+                <div>
+                    <span id="sidebar-brand" style="font-size:1.1rem; font-weight:700; color:#111827; letter-spacing:-0.02em;">Estate<span style="color:#2563eb;">Flow</span></span>
+                    <span style="display:block; font-size:0.65rem; text-transform:uppercase; font-weight:600; color:#9ca3af; letter-spacing:0.08em;">CRM Suite</span>
+                </div>
+            </a>
+            <button id="sidebar-close-btn" class="md:hidden" style="color:#9ca3af; border:none; background:none; cursor:pointer; padding:6px; border-radius:8px;">
+                <i class="fa-solid fa-xmark" style="font-size:1.1rem;"></i>
+            </button>
+        </div>
 
+        <!-- Navigation -->
+        <nav style="flex:1; padding:24px 16px; overflow-y:auto;">
+            <p class="sidebar-section-label" style="font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; padding:0 12px; margin-bottom:8px;">Main Menu</p>
 
-            <li>
-                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
-                    <i class="ph-fill ph-gear text-xl"></i>
-                    <span class="is-drawer-close:hidden">Settings</span>
-                </button>
-            </li>
-        </ul>
+            <a href="{% url 'home' %}" class="sidebar-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; font-size:0.875rem; font-weight:500; text-decoration:none; margin-bottom:4px; transition:background 0.15s, color 0.15s;">
+                <i class="fa-solid fa-chart-pie sidebar-icon" style="width:20px; text-align:center;"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'properties' %}" class="sidebar-link {% if request.resolver_match.url_name == 'properties' or request.resolver_match.url_name == 'edit-property' %}active{% endif %}" style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; font-size:0.875rem; font-weight:500; text-decoration:none; margin-bottom:4px; transition:background 0.15s, color 0.15s;">
+                <i class="fa-solid fa-building sidebar-icon" style="width:20px; text-align:center;"></i>
+                <span>Properties</span>
+            </a>
+            <a href="{% url 'leads' %}" class="sidebar-link {% if request.resolver_match.url_name == 'leads' or request.resolver_match.url_name == 'edit-lead' %}active{% endif %}" style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; font-size:0.875rem; font-weight:500; text-decoration:none; margin-bottom:4px; transition:background 0.15s, color 0.15s;">
+                <i class="fa-solid fa-users sidebar-icon" style="width:20px; text-align:center;"></i>
+                <span>Leads</span>
+            </a>
+            <a href="{% url 'deals' %}" class="sidebar-link {% if request.resolver_match.url_name == 'deals' or request.resolver_match.url_name == 'edit-deal' %}active{% endif %}" style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; font-size:0.875rem; font-weight:500; text-decoration:none; margin-bottom:4px; transition:background 0.15s, color 0.15s;">
+                <i class="fa-solid fa-handshake sidebar-icon" style="width:20px; text-align:center;"></i>
+                <span>Deals</span>
+            </a>
+            <a href="{% url 'agents' %}" class="sidebar-link {% if request.resolver_match.url_name == 'agents' or request.resolver_match.url_name == 'edit-agent' %}active{% endif %}" style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; font-size:0.875rem; font-weight:500; text-decoration:none; margin-bottom:4px; transition:background 0.15s, color 0.15s;">
+                <i class="fa-solid fa-user-tie sidebar-icon" style="width:20px; text-align:center;"></i>
+                <span>Agents</span>
+            </a>
+
+            <div style="padding-top:24px;">
+                <p class="sidebar-section-label" style="font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; padding:0 12px; margin-bottom:8px;">Management</p>
+                <a href="/admin/" target="_blank" class="sidebar-link" style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; font-size:0.875rem; font-weight:500; text-decoration:none; transition:background 0.15s, color 0.15s;">
+                    <i class="fa-solid fa-sliders sidebar-icon" style="width:20px; text-align:center;"></i>
+                    <span>Django Admin</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; margin-left:auto; color:#9ca3af;"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Footer User Profile -->
+        <div id="sidebar-footer" style="padding:16px; border-top:1px solid #f3f4f6; background:#f9fafb;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#dbeafe; color:#2563eb; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0;">
+                    {% if user.is_authenticated %}{{ user.username|first|upper }}{% else %}<i class="fa-solid fa-user"></i>{% endif %}
+                </div>
+                <div style="flex:1; min-width:0;">
+                    <p id="sidebar-username" style="font-size:0.85rem; font-weight:600; color:#111827; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        {% if user.is_authenticated %}{{ user.username }}{% else %}EstateFlow Agent{% endif %}
+                    </p>
+                    <p id="sidebar-email" style="font-size:0.75rem; color:#6b7280; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        {% if user.is_authenticated %}{{ user.email|default:"Active User" }}{% else %}crm@estateflow.com{% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</aside>
+
+<!-- Mobile Overlay -->
+<div id="sidebar-backdrop" class="fixed inset-0 hidden md:hidden" style="background:rgba(17,24,39,0.4); backdrop-filter:blur(2px); z-index:20;"></div>
+
+<style>
+/* Sidebar link default */
+.sidebar-link { color: #4b5563; }
+.sidebar-link .sidebar-icon { color: #9ca3af; }
+.sidebar-link:hover { background: #f3f4f6 !important; color: #111827 !important; }
+.sidebar-link:hover .sidebar-icon { color: #374151; }
+.sidebar-link.active { background: #eff6ff !important; color: #2563eb !important; font-weight: 600 !important; }
+.sidebar-link.active .sidebar-icon { color: #2563eb !important; }
+
+/* Dark mode sidebar styles */
+.dark #sidebar                { background: #1f2937 !important; border-color: #374151 !important; }
+.dark #sidebar-footer         { background: #111827 !important; border-color: #374151 !important; }
+.dark #sidebar-brand          { color: #f9fafb !important; }
+.dark .sidebar-section-label  { color: #6b7280 !important; }
+.dark .sidebar-link           { color: #9ca3af !important; }
+.dark .sidebar-link .sidebar-icon { color: #6b7280 !important; }
+.dark .sidebar-link:hover     { background: #374151 !important; color: #f3f4f6 !important; }
+.dark .sidebar-link.active    { background: rgba(37,99,235,0.2) !important; color: #60a5fa !important; }
+.dark .sidebar-link.active .sidebar-icon { color: #60a5fa !important; }
+.dark #sidebar-username       { color: #f3f4f6 !important; }
+.dark #sidebar-email          { color: #9ca3af !important; }
+
+/* Dark mode navbar styles */
+.dark #main-navbar { background: #1f2937 !important; border-color: #374151 !important; }
+.dark #nav-username { color: #e5e7eb !important; }
+.dark #theme-toggle-btn { color: #9ca3af !important; }
+.dark #global-search {
+    background: #374151 !important;
+    color: #f3f4f6 !important;
+    border-color: #4b5563 !important;
+}
+</style>

@@ -1,41 +1,119 @@
-<div class="overflow-x-auto">
-    <table class="table table-zebra">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Lead</th>
-                <th>Contact</th>
-                <th>Source</th>
-                <th>Status</th>
-                <th>Budget</th>
-                <th>Agent</th>
-                <th>Preferred Location</th>
-                <th>Created At</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in leads %}
-            <tr>
-                <th>{{ row.id }}</th>
-                <td>{{ row.full_name }}</td>
-                <td>{{ row.phone_number }}</td>
-                <td><span class="badge badge-soft capitalize badge-accent">{{ row.source }}</span></td>
-                {% load humanize %}
-                <td><span class="badge badge-soft capitalize badge-secondary">{{ row.status }}</span></td>
-                <td class="capitalize">{{ row.min_budget | intword }} - {{row.max_budget | intword }}</td>
-                <td class="link">
-                    <a href="{% url 'agents' %}">{{ row.assigned_agent.user.first_name }}</a>
-                </td>
-                <td>{{ row.preferred_location }}</td>
-                <td>{{ row.created_at.date }}</td>
-                <td>
-                    <a href="{% url 'edit-lead' row.id %}" class="btn btn-xs">
-                        <i class="ph ph-pencil"></i>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+﻿<!-- Leads Table Component -->
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2">
+                <h2 class="font-bold text-gray-800 dark:text-white text-lg">Active Leads</h2>
+                <span class="px-2 py-0.5 text-xs font-semibold bg-brand-50 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-full">
+                    {{ leads|length|default:"0" }} Active
+                </span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400 mt-1">Prospective clients and their current pipeline status</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'leads' %}" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 dark:text-brand-400 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 bg-brand-50 dark:bg-brand-900/50 dark:bg-brand-900/50 hover:bg-brand-100 dark:hover:bg-brand-900/80 px-3 py-1.5 rounded-lg transition-colors">
+                <span>View All Leads</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50/75 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700 text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400">
+                    <th class="py-3 px-6">Lead</th>
+                    <th class="py-3 px-6">Status</th>
+                    <th class="py-3 px-6">Interest & Location</th>
+                    <th class="py-3 px-6">Budget Range</th>
+                    <th class="py-3 px-6">Assigned Agent</th>
+                    <th class="py-3 px-6 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
+                {% for lead in leads %}
+                <tr class="hover:bg-gray-50/60 dark:hover:bg-gray-700/60 transition-colors">
+                    <td class="py-3.5 px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-xs shrink-0">
+                                {{ lead.full_name|first|upper }}
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ lead.full_name }}</p>
+                                <a href="tel:{{ lead.phone_number }}" class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400 hover:text-brand-600 dark:text-brand-400 transition-colors">
+                                    <i class="fa-solid fa-phone text-[10px] mr-1"></i>{{ lead.phone_number }}
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-6 whitespace-nowrap">
+                        {% if lead.status == 'new' %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>New
+                            </span>
+                        {% elif lead.status == 'contacted' %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-50 text-yellow-700 border border-yellow-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Contacted
+                            </span>
+                        {% elif lead.status == 'site_visited' %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>Site Visited
+                            </span>
+                        {% elif lead.status == 'negotiations' %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>Negotiations
+                            </span>
+                        {% elif lead.status == 'done' %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>Done
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Lost
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3.5 px-6">
+                        <p class="font-medium text-gray-800 dark:text-white text-xs">{{ lead.interested_property_types|default:"General" }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400 flex items-center gap-1 mt-0.5">
+                            <i class="fa-solid fa-location-dot text-[10px] text-gray-400 dark:text-gray-400"></i>{{ lead.preferred_location }}
+                        </p>
+                    </td>
+                    <td class="py-3.5 px-6 whitespace-nowrap text-xs font-medium text-gray-700 dark:text-gray-300">
+                        ${{ lead.min_budget|floatformat:0 }} - ${{ lead.max_budget|floatformat:0 }}
+                    </td>
+                    <td class="py-3.5 px-6 whitespace-nowrap">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-gray-700 dark:text-gray-300 font-medium">
+                                {{ lead.assigned_agent.user.get_full_name|default:lead.assigned_agent.user.username|default:"Unassigned" }}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                        <a href="{% url 'edit-lead' lead.id %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 dark:text-gray-400 hover:text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:bg-brand-900/50 transition-colors" title="Edit Lead">
+                            <i class="fa-solid fa-pen-to-square text-sm"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="py-12 text-center text-gray-500 dark:text-gray-400 dark:text-gray-400">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-400 dark:text-gray-400 mb-3">
+                                <i class="fa-solid fa-users text-xl"></i>
+                            </div>
+                            <p class="font-medium text-gray-700 dark:text-gray-300">No leads registered yet</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-400 mt-1 max-w-sm">Capture incoming prospective buyers and assign them to active agents.</p>
+                            <a href="{% url 'leads' %}" class="mt-4 inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3.5 py-2 rounded-lg transition-colors shadow-xs">
+                                <i class="fa-solid fa-plus text-xs"></i> Add First Lead
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+

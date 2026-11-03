@@ -15,7 +15,7 @@ class EditAgentForm(forms.ModelForm):
 
 
 class PropertyForm(forms.ModelForm):
-    description = forms.CharField()
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
 
     class Meta:
         model = Property
@@ -32,3 +32,13 @@ class DealForm(forms.ModelForm):
     class Meta:
         model = Deal
         fields = "__all__"
+        widgets = {
+            "expected_closing_date": forms.DateInput(
+                attrs={"type": "date"},
+                format="%Y-%m-%d",
+            ),
+            "actual_closing_date": forms.DateInput(
+                attrs={"type": "date"},
+                format="%Y-%m-%d",
+            ),
+        }

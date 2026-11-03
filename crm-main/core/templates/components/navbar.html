@@ -1,0 +1,87 @@
+﻿<!-- Navbar -->
+<header style="background:white; border-bottom:1px solid #e5e7eb; padding:0.875rem 1.5rem; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; transition:background 0.2s;" id="main-navbar">
+    <div style="display:flex; align-items:center; gap:1rem; flex:1;">
+        <!-- Mobile Sidebar Toggle -->
+        <button id="sidebar-toggle-btn" class="md:hidden" style="color:#6b7280; padding:8px; border-radius:8px; border:none; background:none; cursor:pointer;">
+            <i class="fa-solid fa-bars" style="font-size:1.1rem;"></i>
+        </button>
+
+        <!-- Search Bar -->
+        <div style="position:relative; width:100%; max-width:400px; display:none;" id="search-wrapper" class="sm-show">
+            <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:0.8rem;"></i>
+            <input
+                type="text"
+                id="global-search"
+                placeholder="Search properties, leads, agents..."
+                style="width:100%; font-size:0.8rem; padding:8px 12px 8px 36px; border-radius:8px; border:1px solid #e5e7eb; outline:none; background:#f9fafb; color:#111827; box-sizing:border-box;"
+            >
+        </div>
+    </div>
+
+    <!-- Right Controls -->
+    <div style="display:flex; align-items:center; gap:10px;">
+        <!-- Quick Actions -->
+        <button style="display:none; align-items:center; gap:6px; background:#eff6ff; color:#2563eb; padding:6px 12px; border-radius:8px; font-size:0.8rem; font-weight:500; border:none; cursor:pointer;" id="quick-actions-btn" class="sm-flex">
+            <i class="fa-solid fa-bolt" style="font-size:0.7rem;"></i>
+            <span>Quick Actions</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" title="Toggle dark mode"
+            style="padding:8px; border-radius:8px; border:none; background:none; cursor:pointer; color:#6b7280; display:flex; align-items:center; justify-content:center; width:36px; height:36px;">
+            <i id="theme-icon-moon" class="fa-solid fa-moon" style="font-size:1rem;"></i>
+            <i id="theme-icon-sun"  class="fa-solid fa-sun"  style="font-size:1rem; display:none;"></i>
+        </button>
+
+        <!-- Notification Bell -->
+        <button style="position:relative; padding:8px; color:#6b7280; border-radius:8px; border:none; background:none; cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center;" title="Notifications">
+            <i class="fa-regular fa-bell" style="font-size:1.1rem;"></i>
+            <span style="position:absolute; top:6px; right:6px; width:8px; height:8px; background:#2563eb; border-radius:50%; border:2px solid white;"></span>
+        </button>
+
+        <div style="width:1px; height:24px; background:#e5e7eb;"></div>
+
+        <!-- Profile -->
+        <div style="display:flex; align-items:center; gap:8px; padding-left:4px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#2563eb; color:white; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:0.75rem;">
+                {% if user.is_authenticated %}{{ user.username|first|upper }}{% else %}EF{% endif %}
+            </div>
+            <span id="nav-username" style="font-size:0.85rem; font-weight:500; color:#374151;">
+                {% if user.is_authenticated %}{{ user.username }}{% else %}EstateFlow Agent{% endif %}
+            </span>
+        </div>
+    </div>
+</header>
+
+<style>
+@media(min-width:640px){ #search-wrapper{display:block!important;} #quick-actions-btn{display:flex!important;} }
+</style>
+
+<script>
+// Apply dark mode styles to navbar dynamically
+(function applyNavbarTheme() {
+    var navbar = document.getElementById('main-navbar');
+    var username = document.getElementById('nav-username');
+    var bell = document.querySelector('#main-navbar [title="Notifications"]');
+    var divider = document.querySelector('#main-navbar [style*="width:1px"]');
+    function setTheme() {
+        var dark = document.documentElement.classList.contains('dark');
+        if (!navbar) return;
+        navbar.style.background     = dark ? '#1f2937' : 'white';
+        navbar.style.borderColor    = dark ? '#374151' : '#e5e7eb';
+        if (username)  username.style.color  = dark ? '#e5e7eb' : '#374151';
+        if (divider)   divider.style.background = dark ? '#374151' : '#e5e7eb';
+        var themeBtn = document.getElementById('theme-toggle-btn');
+        if (themeBtn) themeBtn.style.color = dark ? '#9ca3af' : '#6b7280';
+        var searchInput = document.getElementById('global-search');
+        if (searchInput) {
+            searchInput.style.background = dark ? '#374151' : '#f9fafb';
+            searchInput.style.color      = dark ? '#f3f4f6' : '#111827';
+            searchInput.style.borderColor = dark ? '#4b5563' : '#e5e7eb';
+        }
+    }
+    setTheme();
+    var obs = new MutationObserver(setTheme);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>

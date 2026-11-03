@@ -10,5 +10,6 @@ urlpatterns = [
     path("leads/", views.leads, name="leads"),
     path("leads/<int:id>/edit", views.edit_lead, name="edit-lead"),
     path("deals/", views.deals, name="deals"),
-    path("deals/<int:id>/edit", views.edit_agent, name="edit-deal"),
+    path("deals/<int:id>/edit", views.edit_deal, name="edit-deal"),
+    path("ai/chat/", views.ai_chat, name="ai-chat"),
 ]

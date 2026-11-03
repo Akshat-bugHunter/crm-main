@@ -1,16 +1,60 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
-{% block title %}
-Leads
-{% endblock %}
-
-
+{% block title %}Edit Lead #{{ id }} | EstateFlow{% endblock %}
 
 {% block content %}
-<h1 class="text-2xl">Edit Lead</h1>
-<form action="{% url 'edit-lead' id %}" method="post" class="gridform">
-    {% csrf_token %}
-    {{ editform }}
-    <button type="submit" class="mt-4 btn btn-success">Submit</button>
-</form>
+<div class="max-w-3xl mx-auto space-y-6">
+    <!-- Breadcrumb / Back Button -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <a href="{% url 'leads' %}" class="hover:text-brand-600 transition-colors flex items-center gap-1.5 font-medium">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+                <span>Back to Leads</span>
+            </a>
+            <span>/</span>
+            <span class="text-gray-900 dark:text-white font-semibold">Edit Lead #{{ id }}</span>
+        </div>
+    </div>
+
+    <!-- Edit Form Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700/80 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Update Lead Information</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Update pipeline stage, reassign agents, or adjust budget and location requirements.</p>
+        </div>
+
+        <form method="POST" action="{% url 'edit-lead' id %}" class="p-6 sm:p-8 space-y-5 m-0 max-h-none">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {% for field in editform %}
+                <div class="space-y-1.5 {% if field.name == 'preferred_location' or field.name == 'interested_property_types' %}md:col-span-2{% endif %}">
+                    <label for="{{ field.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                        {{ field.label }} {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    <div class="text-sm">
+                        {{ field }}
+                    </div>
+                    {% if field.help_text %}
+                        <p class="text-xs text-gray-400">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                        <p class="text-xs text-red-500 font-medium">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="pt-6 border-t border-gray-100 dark:border-gray-700 flex items-center justify-end gap-3">
+                <a href="{% url 'leads' %}" class="px-5 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-700 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold transition-colors shadow-xs">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
+
+
